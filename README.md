@@ -2,7 +2,7 @@
 
 Erlang practicing - Knight's tour problem
 
-The purpose of the project is to find all paths on a 5X5 board.
+The purpose of the project is to find all paths on a 5X5 board in the shortest time, written in erlang.
 
 ## Simple backtracking - knights_tour.erl
 
