@@ -1,6 +1,9 @@
 %%% Knight’s tour problem (5x5, simple backtracking)
 
-%%% erlc knights_tour
+%%% compile:
+%%% erlc knights_tour.erl
+
+%%% run:
 %%% erl -pa ebin -eval "knights_tour:main()" -noshell
 
 -module(knights_tour).
@@ -23,8 +26,7 @@ main() ->
 		{3, 2}, %% - 5x5
 		{3, 3}
 		],
-	[Pos || Pos <- Plist, step(1, Board, Pos, false) == ok],
-	% rpc:pmap( { ?MODULE, 'pstep' }, [Board], Plist),
+	[Pos || Pos <- Plist, pstep(Pos, Board) == ok],
 	BPinterPid ! {terminate, self()},
 	receive
 		ok -> ok
@@ -69,8 +71,6 @@ board_printer(N) ->
 	end.
 
 bdraw(Board) ->
-	% io:format("Board:~n~p~n", [Board]),
-	% io:format("~n"),
 	[X || X <- lists:seq(1,?WX), bdraw(Board, X)],
 	io:format("~n").
 bdraw(Board, X) ->
@@ -78,13 +78,12 @@ bdraw(Board, X) ->
 	io:format("~n"),
 	true.
 bdraw(Board, X, Y) ->
-	% io:format("~2.. B ", [((?WX*?WY)+1) - string:str(Board, [{X, Y}])]),
 	io:format("~2.. B ", [((?WX*?WY)+1) - find(Board, {X, Y}, 1)]),
 	true.
 
-find([], Item, N) ->
+find([], _, _) ->
 	nomatch;
-find([F | Board], Item, N) when F == Item->
+find([F | _], Item, N) when F == Item->
 	N;
 find([_ | Board], Item, N) ->
 	find(Board, Item, N + 1).
